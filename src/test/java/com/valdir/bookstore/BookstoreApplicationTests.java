@@ -1,4 +1,4 @@
-package com.patryck.bookstore;
+package com.valdir.bookstore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
