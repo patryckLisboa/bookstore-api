@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,5 +75,12 @@ public class LisvroResources {
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/livros/{id}").buildAndExpand(newObj.getId()).toUri();//uri é o que vai editar do cabecalho da requisição
 		return ResponseEntity.created(uri).build(); // vai passar a url onde se encontra o novo livro salvo
 		//http://localhost:8080/livros?categoria=3  e passando um livro a ser incluido
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Integer id){
+		livroService.delete(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 }

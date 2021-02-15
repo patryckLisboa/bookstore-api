@@ -55,4 +55,9 @@ public class LivroService {
 		return livroRepository.save(obj);
 	}
 
+	public void delete(Integer id) {
+		Livro obj = findById(id); // validação para ver se obj existe
+		livroRepository.delete(obj);
+	}
+
 }
