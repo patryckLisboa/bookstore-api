@@ -4,8 +4,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +25,7 @@ import com.valdir.bookstore.domain.Livro;
 import com.valdir.bookstore.dtos.LivroDTO;
 import com.valdir.bookstore.service.LivroService;
 
+@CrossOrigin("*") // o /livros pode receber requisição de diversas outras fontes (ver)
 @RestController
 @RequestMapping(value = "/livros")
 public class LisvroResources {
@@ -50,7 +54,7 @@ public class LisvroResources {
 	}
 	
 	@PutMapping(value = "/{id}") // atualizar informação total
-	public ResponseEntity<Livro> update(@PathVariable Integer id, @RequestBody Livro obj){ //variavel e corpo da requisção, resposta
+	public ResponseEntity<Livro> update(@PathVariable Integer id,@Valid @RequestBody Livro obj){ //variavel e corpo da requisção, resposta
 		Livro newObj = livroService.update(id, obj);
 		
 		return ResponseEntity.ok().body(newObj);
@@ -59,7 +63,7 @@ public class LisvroResources {
 	}
 	
 	@PatchMapping(value = "/{id}") // atualizar informação parcial
-	public ResponseEntity<Livro> updatePath(@PathVariable Integer id, @RequestBody Livro obj){ //variavel e corpo da requisção, resposta
+	public ResponseEntity<Livro> updatePath( @PathVariable Integer id,@Valid @RequestBody Livro obj){ //variavel e corpo da requisção, resposta
 		Livro newObj = livroService.update(id, obj);
 		
 		
@@ -68,8 +72,9 @@ public class LisvroResources {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Livro> create(@RequestParam(value = "categoria" , defaultValue = "0") Integer id_cat,
-			@RequestBody Livro obj){ //defaul - se não passar valor, o valor é zero
+	public ResponseEntity<Livro> create( @RequestParam(value = "categoria" , defaultValue = "0") Integer id_cat,
+			@Valid @RequestBody Livro obj){ //defaul - se não passar valor, o valor é zero
+			//valid precisa ser antes do requestbody
 		
 		Livro newObj = livroService.create(id_cat, obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/livros/{id}").buildAndExpand(newObj.getId()).toUri();//uri é o que vai editar do cabecalho da requisição

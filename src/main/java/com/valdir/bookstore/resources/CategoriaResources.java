@@ -5,8 +5,11 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import com.valdir.bookstore.domain.Categoria;
 import com.valdir.bookstore.dtos.CategoriaDTO;
 import com.valdir.bookstore.service.CategoriaService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaResources {
@@ -43,14 +47,14 @@ public class CategoriaResources {
 	}
 	
 	@PostMapping	
-	public ResponseEntity<Categoria> create(@RequestBody Categoria obj) {
+	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria obj) { // valid vai validar se está atendendo aos requisitos do domain
 		obj = categoriaSerice.create(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CategoriaDTO> update(@PathVariable Integer id, @RequestBody CategoriaDTO objDTO){
+	public ResponseEntity<CategoriaDTO> update(@PathVariable Integer id,@Valid @RequestBody CategoriaDTO objDTO){
 		Categoria newObj = categoriaSerice.update(id, objDTO);
 		
 		return ResponseEntity.ok(new CategoriaDTO(newObj));
